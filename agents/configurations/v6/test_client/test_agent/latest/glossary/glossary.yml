@@ -1,0 +1,33 @@
+# Glossaire pour améliorer la transcription
+
+pronunciations:
+  "AB-123-CD":
+    phonetic: "A B tiret un deux trois tiret C D"
+  "Auto Test":
+    phonetic: "Auto Test"
+  "Jean Dupont":
+    phonetic: "Jean Dupont"
+  "Marie Martin":
+    phonetic: "Marie Martin"
+
+transcriptions:
+  plaque:
+    - "plaque d'immatriculation"
+    - "plaque"
+    - "numéro de plaque"
+    - "immatriculation"
+  
+  kilometrage:
+    - "kilométrage"
+    - "kilomètres"
+    - "km"
+    - "compteur"
+  
+  rendez-vous:
+    - "rendez-vous"
+    - "rdv"
+    - "appointment"
+
+definitions:
+  atelier: "L'atelier est le service qui s'occupe des réparations et de l'entretien des véhicules"
+  SAV: "Le Service Après-Vente assure le suivi client et gère les réclamations"

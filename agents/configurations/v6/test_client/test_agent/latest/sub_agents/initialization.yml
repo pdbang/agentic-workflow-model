@@ -1,0 +1,14 @@
+sub_agent:
+  name: "initialization"
+  description: "État principal de conversation pour identifier et router les demandes"
+  
+  prompts:
+    - module: "base"
+      path: "context/personality"
+  
+  tools:
+    
+    stop_recording:
+      name: "Stop Recording"
+      module: "base"
+      path: "stop_recording"

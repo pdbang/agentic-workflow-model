@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# test scripts
+test-step*.ts
+
 # next.js
 /.next/
 /out/

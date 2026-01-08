@@ -1,0 +1,404 @@
+# Memory variables aggregated from all modules used by this agent
+# This file is auto-generated from module memory.py files
+
+UserNumber:
+  title: "User Number"
+  description: "Phone number of the client"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+Summary:
+  title: "Summary"
+  description: "Call summary"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+PhoneNumber:
+  title: "Phone Number"
+  description: "Phone number"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+information_to_collect:
+  title: "Information To Collect"
+  description: "Information to collect for the selected call reason"
+  type: "array"
+  items:
+    type: "string"
+  default: []
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+closing_status:
+  title: "Closing Status"
+  description: "Status at closing"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+vehicleVIN:
+  title: "Vehicle VIN"
+  description: "Vehicle registration number"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+vehicleDateMec:
+  title: "Vehicle Date MEC"
+  description: "Date of first registration"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+emails:
+  title: "Emails"
+  description: "Email addresses"
+  type: "array"
+  items:
+    type: "string"
+  default: []
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+end_action:
+  title: "End Action"
+  description: "Actions at end"
+  type: "array"
+  items:
+    type: "string"
+  default: []
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+token_AAA:
+  title: "Token AAA"
+  description: "Token for authentification on AAA"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+RedirectedTo:
+  title: "Redirected To"
+  description: "Phone number to which the client is redirected, empty if not redirected"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+ConfRedirectionTo:
+  title: "Conf Redirection To"
+  description: "Phone number to which the client is redirected, empty if not redirected"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+NoRecording:
+  title: "No Recording"
+  description: "True if recording is stopped"
+  type: "boolean"
+  default: false
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+email_sent:
+  title: "Email Sent"
+  description: "True when an email is sent"
+  type: "boolean"
+  default: false
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+universe:
+  title: "Universe"
+  description: "Universe of the call"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+label_id:
+  title: "Label ID"
+  description: "Label identifier"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+label:
+  title: "Label"
+  description: "Label name"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+team_id:
+  title: "Team ID"
+  description: "Team identifier"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+team:
+  title: "Team"
+  description: "Team name"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+is_open:
+  title: "Is Open"
+  description: "Open status"
+  type: "boolean"
+  default: false
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+phone_number:
+  title: "Phone Number"
+  description: "Contact phone number"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+license_plate:
+  title: "License Plate"
+  description: "reformatted license plate"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+VIN:
+  title: "VIN"
+  description: "Vehicle Identification Number"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+brand:
+  title: "Brand"
+  description: "Brand of the car"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+model:
+  title: "Model"
+  description: "Model of the car"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+mileage:
+  title: "Mileage"
+  description: "Vehicle mileage"
+  type: "integer"
+  default: 0
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+status:
+  title: "Status"
+  description: "Le status de l'appel: in_progress, abandoned, handled_by_diago, to_be_processed, handled_by_team"
+  type: "string"
+  default: "in_progress"
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+assigned_to:
+  title: "Assigned To"
+  description: "L'assignation de l'appel: diago, teams:<team_id>, employees:<employee_id>"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+forwarded_call:
+  title: "Forwarded Call"
+  description: "True if call was successfully forwarded"
+  type: "boolean"
+  default: false
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+civility:
+  title: "Civility"
+  description: "Client civility"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+first_name:
+  title: "First Name"
+  description: "Client first name"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+last_name:
+  title: "Last Name"
+  description: "Last name of the client"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+rating_client:
+  title: "Rating Client"
+  description: "Note entre 1 et 5"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+company_name:
+  title: "Company Name"
+  description: "Company name"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+company_description:
+  title: "Company Description"
+  description: "Company description"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
+
+company_address:
+  title: "Company Address"
+  description: "Company address"
+  type: "string"
+  default: ""
+  scopes:
+    session: true
+    user: false
+    shared: false
+  module: "base_auto"
