@@ -1,0 +1,102 @@
+'use client'
+
+import type { Message } from '@/types/agent'
+import { useState } from 'react'
+import Button from '@/app/components/base/button'
+
+type MessagesFormProps = {
+  messages: Record<string, Message>
+  onChange: (messages: Record<string, Message>) => void
+}
+
+export function MessagesForm({ messages, onChange }: MessagesFormProps) {
+  const [newMessageKey, setNewMessageKey] = useState('')
+
+  const handleUpdateMessage = (key: string, field: 'text' | 'audio', value: string) => {
+    onChange({
+      ...messages,
+      [key]: {
+        ...messages[key],
+        [field]: value,
+      },
+    })
+  }
+
+  const handleAddMessage = () => {
+    if (newMessageKey && !messages[newMessageKey]) {
+      onChange({
+        ...messages,
+        [newMessageKey]: { text: '' },
+      })
+      setNewMessageKey('')
+    }
+  }
+
+  const handleRemoveMessage = (key: string) => {
+    const { [key]: _removed, ...rest } = messages
+    onChange(rest)
+  }
+
+  return (
+    <section className="rounded-lg bg-white p-6 shadow">
+      <h2 className="mb-4 text-lg font-semibold text-gray-900">Messages</h2>
+
+      <div className="space-y-4">
+        {Object.entries(messages).map(([key, message]) => (
+          <div key={key} className="rounded-lg border border-gray-200 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-medium text-gray-900">{key}</h3>
+              <Button
+                variant="ghost"
+                size="small"
+                onClick={() => handleRemoveMessage(key)}
+              >
+                Remove
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Text
+                </label>
+                <textarea
+                  value={message.text ?? ''}
+                  onChange={e => handleUpdateMessage(key, 'text', e.target.value)}
+                  rows={2}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Audio Path (optional)
+                </label>
+                <input
+                  type="text"
+                  value={message.audio ?? ''}
+                  onChange={e => handleUpdateMessage(key, 'audio', e.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="audios/welcome.mp3"
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newMessageKey}
+            onChange={e => setNewMessageKey(e.target.value)}
+            placeholder="New message key (e.g., welcome)"
+            className="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <Button variant="primary" onClick={handleAddMessage}>
+            Add Message
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
