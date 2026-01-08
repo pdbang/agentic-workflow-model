@@ -1,0 +1,13 @@
+description: Transférer l'appel vers un autre numéro.
+input_schema:
+  properties:
+    Dtmf Sequence:
+      description: Séquence DTMF à envoyer après le transfert
+      type: string
+    Phone Number:
+      description: Numéro de téléphone à transférer
+      type: string
+  required:
+  - Phone Number
+  type: object
+name: transfer_call

@@ -1,0 +1,14 @@
+description: Call an external API.
+input_schema:
+  properties:
+    Payload:
+      description: JSON payload
+      type: object
+    Url:
+      description: URL to call
+      type: string
+  required:
+  - Url
+  - Payload
+  type: object
+name: call_api

@@ -1,0 +1,49 @@
+sub_agent:
+  name: "initialization"
+  description: "État principal de conversation pour identifier et router les demandes"
+  
+  prompts:
+    - module: "base_auto"
+      path: "context/personality"
+    - module: "base_auto"
+      path: "context/communication"
+    - module: "base_auto"
+      path: "context/opening_hours"
+    - module: "base_auto"
+      path: "utils/teams"
+    - module: "base_auto"
+      path: "utils/employees"
+  
+  tools:
+    select_team:
+      name: "Select Team"
+      module: "base_auto"
+      path: "select_team"
+      hooks:
+        on_transfer_failed:
+          action: "switch_sub_agent"
+          target_sub_agent: "collect_information"
+    
+    select_employee:
+      name: "Select Employee"
+      module: "base_auto"
+      path: "select_employee"
+      hooks:
+        on_transfer_failed:
+          action: "switch_sub_agent"
+          target_sub_agent: "collect_information"
+    
+    handle_reason:
+      name: "Handle Reason"
+      module: "base_auto"
+      path: "handle_reason"
+    
+    end_call:
+      name: "End Call"
+      module: "base_auto"
+      path: "end_call"
+    
+    stop_recording:
+      name: "Stop Recording"
+      module: "base_auto"
+      path: "stop_recording"

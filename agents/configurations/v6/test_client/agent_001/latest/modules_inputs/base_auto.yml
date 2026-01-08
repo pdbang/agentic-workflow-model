@@ -1,0 +1,250 @@
+company:
+  name: "Auto Test Concession"
+  description: "Concession automobile de test pour validation du module base_auto"
+  address: "123 Rue de Test, 75001 Paris"
+  opening_hours:
+    active: true
+    lundi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "18:00"
+    mardi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "18:00"
+    mercredi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "18:00"
+    jeudi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "18:00"
+    vendredi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "18:00"
+    samedi:
+      active: true
+      slots:
+        - start: "09:00"
+          end: "13:00"
+    dimanche:
+      active: false
+      slots: []
+    special_days: {}
+    timezone: "Europe/Paris"
+
+phone_numbers:
+  atelier_phone:
+    number: "+33123456789"
+    sip_post: ""
+    from_user_number: true
+    dtmf: ""
+    need_confirmation: false
+    opening_hours:
+      active: false
+  commercial_phone:
+    number: "+33123456790"
+    sip_post: ""
+    from_user_number: true
+    dtmf: ""
+    need_confirmation: false
+    opening_hours:
+      active: false
+  sav_phone:
+    number: "+33123456791"
+    sip_post: ""
+    from_user_number: true
+    dtmf: ""
+    need_confirmation: false
+    opening_hours:
+      active: false
+
+teams:
+  atelier:
+    name: "Atelier"
+    description: "Équipe de l'atelier mécanique"
+    phone:
+      numbers:
+        - "atelier_phone"
+      mode: "conference"
+      time_before_next: 20
+    emails:
+      atelier@auto-test.fr: {}
+    opening_hours:
+      active: false
+    transfer_action:
+      active: true
+      enable_transfer: true
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Je vais vous mettre en relation avec l'atelier."
+      collection:
+        - "license_plate"
+        - "mileage"
+        - "phone_number"
+    special_days: {}
+    metadata: {}
+  
+  commercial:
+    name: "Service Commercial"
+    description: "Équipe commerciale pour vente de véhicules"
+    phone:
+      numbers:
+        - "commercial_phone"
+      mode: "conference"
+      time_before_next: 20
+    emails:
+      commercial@auto-test.fr: {}
+    opening_hours:
+      active: false
+    transfer_action:
+      active: true
+      enable_transfer: true
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Je vous transfère au service commercial."
+      collection:
+        - "phone_number"
+    special_days: {}
+    metadata: {}
+  
+  sav:
+    name: "Service Après-Vente"
+    description: "Service après-vente pour suivi client"
+    phone:
+      numbers:
+        - "sav_phone"
+      mode: "conference"
+      time_before_next: 20
+    emails:
+      sav@auto-test.fr: {}
+    opening_hours:
+      active: false
+    transfer_action:
+      active: true
+      enable_transfer: true
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Je vais vous mettre en contact avec le service après-vente."
+      collection:
+        - "license_plate"
+        - "phone_number"
+    special_days: {}
+    metadata: {}
+
+employees:
+  jean_mechanic:
+    name: "Jean Dupont"
+    description: "Mécanicien principal"
+    team: "atelier"
+    phone:
+      numbers: []
+    emails:
+      jean.dupont@auto-test.fr: {}
+    opening_hours:
+      active: false
+    transfer_action:
+      active: true
+      enable_transfer: false
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Je note votre demande pour Jean Dupont, notre mécanicien."
+      collection:
+        - "license_plate"
+        - "mileage"
+        - "phone_number"
+  
+  marie_sales:
+    name: "Marie Martin"
+    description: "Conseillère commerciale"
+    team: "commercial"
+    phone:
+      numbers: []
+    emails:
+      marie.martin@auto-test.fr: {}
+    opening_hours:
+      active: false
+    transfer_action:
+      active: true
+      enable_transfer: false
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Je prends note pour Marie Martin, notre conseillère commerciale."
+      collection:
+        - "phone_number"
+
+labels:
+  rdv_atelier:
+    name: "Rendez-vous atelier"
+    description: "Prise de rendez-vous pour révision ou réparation"
+    team: "atelier"
+    enable_transfer: true
+    collection:
+      - "license_plate"
+      - "mileage"
+      - "phone_number"
+    fallback_action: "collect_info"
+    end_action:
+      - "send_email"
+    instruction: "Je vais vous aider à prendre rendez-vous pour votre véhicule."
+    universe: "atelier"
+    transfer_action:
+      active: true
+      enable_transfer: true
+      fallback_action: "collect_info"
+      end_action:
+        - "send_email"
+      instruction: "Laissez-moi vérifier les disponibilités de l'atelier."
+      collection:
+        - "license_plate"
+        - "mileage"
+        - "phone_number"
+
+collection:
+  license_plate:
+    description: "La plaque d'immatriculation du véhicule concerné"
+    transcription: "La plaque d'immatriculation au format français (par exemple AB-123-CD), belge ou suisse"
+    tool: "check_license_plate"
+    enum: ""
+    enum_list: {}
+    enum_path: ""
+  
+  mileage:
+    description: "Le kilométrage du véhicule, ne pas le répéter au client"
+    transcription: "Le kilométrage en kilomètres, un nombre entier"
+    tool: "check_mileage"
+    enum: ""
+    enum_list: {}
+    enum_path: ""
+  
+  phone_number:
+    description: "Le numéro de téléphone de contact du client"
+    transcription: "Le numéro de téléphone au format français à 10 chiffres (06 ou 07)"
+    tool: "check_phone_number"
+    enum: ""
+    enum_list: {}
+    enum_path: ""
+
+recap:
+  list_recap:
+    tags:
+      - "license_plate"
+      - "mileage"
+      - "phone_number"
+      - "brand"
+      - "model"
+      - "team"
+      - "label"
+      - "status"
