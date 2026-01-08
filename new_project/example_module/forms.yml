@@ -1,0 +1,9 @@
+fields:
+- label: Agent Owner
+  name: agent_owner
+  required: true
+  type: text
+- label: Email
+  name: email
+  required: true
+  type: object

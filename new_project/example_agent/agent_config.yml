@@ -1,0 +1,41 @@
+version: "v6"
+language: "fr-FR"
+timezone: "Europe/Paris"
+modules: 
+ - "base_auto"
+
+messages:
+  welcome:
+    texts:
+      fr-FR: "Bonjour, vous êtes bien chez Auto Test. Comment puis-je vous aider aujourd'hui ?"
+  goodbye:
+    texts:
+      fr-FR: "Merci pour votre appel. Au revoir !"
+  machine_detected:
+    texts:
+      fr-FR: "Nous ne prenons pas les messages sur répondeur. Veuillez rappeler. Au revoir."
+
+models:
+  llm:
+    provider: "openai"
+    model: "gpt-4o-mini"
+    temperature: 0.7
+  stt:
+    provider: "deepgram"
+    model: "nova-3"
+  tts:
+    provider: "eleven_labs"
+    voice_id: "21m00Tcm4TlvDq8ikWAM"
+    model_id: "eleven_turbo_v2_5"
+
+triggers:
+  start_discussion:
+    - action: "tool"
+      target_tool:
+        module: "base_auto"
+        path: "initialize_session"
+  end_discussion:
+    - action: "tool"
+      target_tool:
+        module: "base_auto"
+        path: "finalize_session"

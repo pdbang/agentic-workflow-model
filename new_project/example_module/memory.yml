@@ -1,0 +1,28 @@
+api_key:
+  description: Description de la variable api_key
+  save:
+    session: false
+    shared: false
+    user: false
+  type: string
+is_second_call:
+  description: Description de la variable is_second_call
+  save:
+    session: true
+    shared: false
+    user: false
+  type: boolean
+selected_team:
+  description: Description de the variable selected_team
+  save:
+    session: true
+    shared: false
+    user: false
+  type: Team
+teams:
+  description: Description de the variable teams
+  save:
+    session: true
+    shared: false
+    user: false
+  type: array[Team]
