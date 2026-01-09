@@ -14,7 +14,6 @@ import CreateAppTemplateDialog from '@/app/components/app/create-app-dialog'
 import CreateAppModal from '@/app/components/app/create-app-modal'
 import CreateFromDSLModal from '@/app/components/app/create-from-dsl-modal'
 import { useStore as useAppStore } from '@/app/components/app/store'
-import { useAppContext } from '@/context/app-context'
 import { useInfiniteAppList } from '@/service/use-apps'
 import { AppModeEnum } from '@/types/app'
 import Nav from '../nav'
@@ -22,7 +21,6 @@ import Nav from '../nav'
 const AppNav = () => {
   const { t } = useTranslation()
   const { appId } = useParams()
-  const { isCurrentWorkspaceEditor } = useAppContext()
   const appDetail = useAppStore(state => state.appDetail)
   const [showNewAppDialog, setShowNewAppDialog] = useState(false)
   const [showNewAppTemplateDialog, setShowNewAppTemplateDialog] = useState(false)
@@ -58,17 +56,12 @@ const AppNav = () => {
     if (appsData) {
       const appItems = flatten((appsData.pages ?? []).map(appData => appData.data))
       const navItems = appItems.map((app) => {
-        const link = ((isCurrentWorkspaceEditor, app) => {
-          if (!isCurrentWorkspaceEditor) {
-            return `/app/${app.id}/overview`
-          }
-          else {
-            if (app.mode === AppModeEnum.WORKFLOW || app.mode === AppModeEnum.ADVANCED_CHAT)
-              return `/app/${app.id}/workflow`
-            else
-              return `/app/${app.id}/configuration`
-          }
-        })(isCurrentWorkspaceEditor, app)
+        const link = (() => {
+          if (app.mode === AppModeEnum.WORKFLOW || app.mode === AppModeEnum.ADVANCED_CHAT)
+            return `/app/${app.id}/workflow`
+          else
+            return `/app/${app.id}/configuration`
+        })()
         return {
           id: app.id,
           icon_type: app.icon_type,
@@ -82,7 +75,7 @@ const AppNav = () => {
       })
       setNavItems(navItems as any)
     }
-  }, [appsData, isCurrentWorkspaceEditor, setNavItems])
+  }, [appsData, setNavItems])
 
   // update current app name
   useEffect(() => {

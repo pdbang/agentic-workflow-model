@@ -1,10 +1,15 @@
 'use client'
-import { useOAuthCallback } from '@/hooks/use-oauth'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 const OAuthCallback = () => {
-  useOAuthCallback()
+  const router = useRouter()
 
-  return <div />
+  useEffect(() => {
+    router.replace('/apps')
+  }, [router])
+
+  return null
 }
 
 export default OAuthCallback

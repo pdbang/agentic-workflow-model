@@ -1,17 +1,16 @@
 'use client'
-import type { MailSendResponse, MailValidityResponse } from '@/service/use-common'
-import { RiArrowLeftLine, RiMailSendFill } from '@remixicon/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import Button from '@/app/components/base/button'
-import Input from '@/app/components/base/input'
-import Toast from '@/app/components/base/toast'
-import Countdown from '@/app/components/signin/countdown'
-import { useLocale } from '@/context/i18n'
-import { useMailValidity, useSendMail } from '@/service/use-common'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function CheckCode() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace('/apps')
+  }, [router])
+
+  return null
+}
   const { t } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()

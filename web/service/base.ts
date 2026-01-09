@@ -551,9 +551,9 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
     const errResp: Response = err as any
     if (errResp.status === 401) {
       const [parseErr, errRespData] = await asyncRunSafe<ResponseError>(errResp.json())
-      const loginUrl = `${globalThis.location.origin}${basePath}/signin`
+      const loginUrl = `${globalThis.location.origin}${basePath}/apps`
       if (parseErr) {
-        globalThis.location.href = loginUrl
+        // Skip redirect for local storage mode
         return Promise.reject(err)
       }
       if (/\/login/.test(url))
@@ -595,19 +595,14 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
 
-      // refresh token
+      // refresh token - skip for local storage mode
       const [refreshErr] = await asyncRunSafe(refreshAccessTokenOrRelogin(TIME_OUT))
       if (refreshErr === null)
         return baseFetch<T>(url, options, otherOptionsForBaseFetch)
-      if (location.pathname !== `${basePath}/signin` || !IS_CE_EDITION) {
-        jumpTo(loginUrl)
-        return Promise.reject(err)
-      }
+      // Skip redirect for local storage mode - just show error if not silent
       if (!silent) {
         Toast.notify({ type: 'error', message })
-        return Promise.reject(err)
       }
-      jumpTo(loginUrl)
       return Promise.reject(err)
     }
     else {

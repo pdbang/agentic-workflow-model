@@ -1,22 +1,15 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import usePSInfo from '../components/billing/partner-stack/use-ps-info'
-import NormalForm from './normal-form'
-import OneMoreStep from './one-more-step'
+import { useRouter } from 'next/navigation'
 
 const SignIn = () => {
-  const searchParams = useSearchParams()
-  const step = searchParams.get('step')
-  const { saveOrUpdate } = usePSInfo()
+  const router = useRouter()
 
   useEffect(() => {
-    saveOrUpdate()
-  }, [])
+    router.replace('/apps')
+  }, [router])
 
-  if (step === 'next')
-    return <OneMoreStep />
-  return <NormalForm />
+  return null
 }
 
 export default SignIn
