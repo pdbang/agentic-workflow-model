@@ -9,6 +9,7 @@ interface SubAgentPanelProps {
   nodeId: string
   config: SubAgentConfig
   modules: string[]
+  availableSubAgents: string[]
   onUpdate: (config: SubAgentConfig) => void
   onDelete: () => void
   onClose: () => void
@@ -18,6 +19,7 @@ export function SubAgentPanel({
   nodeId,
   config,
   modules,
+  availableSubAgents,
   onUpdate,
   onDelete,
   onClose,
@@ -110,6 +112,7 @@ export function SubAgentPanel({
           <ToolsPanel
             tools={config.sub_agent.tools ?? {}}
             modules={modules}
+            availableSubAgents={availableSubAgents}
             onChange={(tools) => handleUpdate('tools', tools)}
           />
         )}

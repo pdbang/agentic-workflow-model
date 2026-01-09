@@ -114,16 +114,17 @@ export function FlowCanvas({ subAgents, modules, onChange }: FlowCanvasProps) {
           <MiniMap />
         </ReactFlow>
 
-        {selectedNode && (
-          <SubAgentPanel
-            nodeId={selectedNode.id}
-            config={subAgents[selectedNode.id]}
-            modules={modules}
-            onUpdate={(config) => handleUpdateSubAgent(selectedNode.id, config)}
-            onDelete={() => handleDeleteSubAgent(selectedNode.id)}
-            onClose={() => setSelectedNode(null)}
-          />
-        )}
+      {selectedNode && (
+        <SubAgentPanel
+          nodeId={selectedNode.id}
+          config={subAgents[selectedNode.id]}
+          modules={modules}
+          availableSubAgents={Object.keys(subAgents)}
+          onUpdate={(config) => handleUpdateSubAgent(selectedNode.id, config)}
+          onDelete={() => handleDeleteSubAgent(selectedNode.id)}
+          onClose={() => setSelectedNode(null)}
+        />
+      )}
       </div>
     </ReactFlowProvider>
   )
