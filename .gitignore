@@ -30,6 +30,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Exception: allow web/lib/ for agent configuration
+!web/lib/
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -236,3 +239,9 @@ scripts/stress-test/reports/
 # settings
 *.local.json
 *.local.md
+
+# Exception: allow web/lib/ for agent configuration
+# This must come after the lib/ rule above to override it
+!web/lib/
+!web/lib/**
+!web/lib/**/*
