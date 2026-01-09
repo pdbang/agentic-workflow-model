@@ -44,8 +44,7 @@ const afterResponseErrorCode = (otherOptions: IOtherOptions): AfterResponseHook 
           bodyJson.then((data: ResponseError) => {
             if (!otherOptions.silent)
               Toast.notify({ type: 'error', message: data.message })
-            if (data.code === 'already_setup')
-              globalThis.location.href = `${globalThis.location.origin}/signin`
+            // Skip redirect for local storage mode
           })
           break
         case 401:
