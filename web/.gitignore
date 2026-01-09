@@ -64,3 +64,9 @@ public/fallback-*.js
 
 .vscode/settings.json
 .vscode/mcp.json
+
+# Allow lib directory (needed for agent configuration)
+# Note: The root .gitignore ignores lib/, so we need to explicitly allow it here
+!/lib/
+!/lib/**
+!/lib/**/*
