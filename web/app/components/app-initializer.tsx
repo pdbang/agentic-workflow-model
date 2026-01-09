@@ -100,7 +100,8 @@ export const AppInitializer = ({
         setInit(true)
       }
       catch {
-        router.replace('/signin')
+        // Skip authentication, go directly to apps
+        setInit(true)
       }
     })()
   }, [isSetupFinished, router, pathname, searchParams, oauthNewUser, setOauthNewUser])
