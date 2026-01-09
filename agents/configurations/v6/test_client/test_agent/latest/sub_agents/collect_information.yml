@@ -1,0 +1,32 @@
+sub_agent:
+  name: "collect_information"
+  description: "État de collecte d'informations quand l'équipe ne peut pas répondre"
+  
+  prompts:
+    - module: "base_auto"
+      path: "context/personality"
+    - module: "base_auto"
+      path: "context/communication"
+    - module: "base_auto"
+      path: "utils/information_to_collect"
+  
+  tools:
+    check_license_plate:
+      name: "Check License Plate"
+      module: "base_auto"
+      path: "tools/check_license_plate.py"
+    
+    check_mileage:
+      name: "Check Mileage"
+      module: "base_auto"
+      path: "tools/check_mileage.py"
+    
+    check_phone_number:
+      name: "Check Phone Number"
+      module: "base_auto"
+      path: "tools/check_phone_number.py"
+    
+    end_call:
+      name: "End Call"
+      module: "base_auto"
+      path: "tools/end_call.py"
