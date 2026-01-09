@@ -2,18 +2,31 @@ import type { TracingProvider } from '@/app/(commonLayout)/app/(appDetailLayout)
 import type { ApiKeysListResponse, AppDailyConversationsResponse, AppDailyEndUsersResponse, AppDailyMessagesResponse, AppDetailResponse, AppListResponse, AppStatisticsResponse, AppTemplatesResponse, AppTokenCostsResponse, AppVoicesListResponse, CreateApiKeyResponse, DSLImportMode, DSLImportResponse, GenerationIntroductionResponse, TracingConfig, TracingStatus, UpdateAppModelConfigResponse, UpdateAppSiteCodeResponse, UpdateOpenAIKeyResponse, ValidateOpenAIKeyResponse, WebhookTriggerResponse, WorkflowDailyConversationsResponse } from '@/models/app'
 import type { CommonResponse } from '@/models/common'
 import type { AppIconType, AppModeEnum, ModelConfig } from '@/types/app'
-import { del, get, patch, post, put } from './base'
+import { localStorageService } from './local-storage'
 
 export const fetchAppList = ({ url, params }: { url: string, params?: Record<string, any> }): Promise<AppListResponse> => {
-  return get<AppListResponse>(url, { params })
+  const result = localStorageService.searchApps(params || {})
+  return Promise.resolve({
+    data: result.data as any[],
+    total: result.total,
+    page: result.page,
+    limit: result.limit,
+    has_more: result.has_more,
+  })
 }
 
 export const fetchAppDetail = ({ url, id }: { url: string, id: string }): Promise<AppDetailResponse> => {
-  return get<AppDetailResponse>(`${url}/${id}`)
+  const app = localStorageService.getAppById(id)
+  if (!app)
+    throw new Error('App not found')
+  return Promise.resolve({ ...app } as AppDetailResponse)
 }
 
 export const fetchAppDetailDirect = async ({ url, id }: { url: string, id: string }): Promise<AppDetailResponse> => {
-  return get<AppDetailResponse>(`${url}/${id}`)
+  const app = localStorageService.getAppById(id)
+  if (!app)
+    throw new Error('App not found')
+  return Promise.resolve({ ...app } as AppDetailResponse)
 }
 
 export const fetchAppTemplates = ({ url }: { url: string }): Promise<AppTemplatesResponse> => {
@@ -37,7 +50,29 @@ export const createApp = ({
   description?: string
   config?: ModelConfig
 }): Promise<AppDetailResponse> => {
-  return post<AppDetailResponse>('apps', { body: { name, icon_type, icon, icon_background, mode, description, model_config: config } })
+  const newApp = localStorageService.createApp({
+    name,
+    icon_type: icon_type || 'emoji',
+    icon: icon || '🤖',
+    icon_background: icon_background || '#FFEAD5',
+    mode,
+    description: description || '',
+    model_config: config,
+    enable_site: false,
+    enable_api: false,
+    api_rpm: 0,
+    api_rph: 0,
+    is_demo: false,
+    model: undefined,
+    status: 'normal',
+    icon_info: {
+      icon: icon || '🤖',
+      icon_type: icon_type || 'emoji',
+      icon_background: icon_background || '#FFEAD5',
+    },
+    tags: [],
+  } as any)
+  return Promise.resolve({ ...newApp } as AppDetailResponse)
 }
 
 export const updateAppInfo = ({
@@ -59,8 +94,18 @@ export const updateAppInfo = ({
   use_icon_as_answer_icon?: boolean
   max_active_requests?: number | null
 }): Promise<AppDetailResponse> => {
-  const body = { name, icon_type, icon, icon_background, description, use_icon_as_answer_icon, max_active_requests }
-  return put<AppDetailResponse>(`apps/${appID}`, { body })
+  const updated = localStorageService.updateApp(appID, {
+    name,
+    icon_type,
+    icon,
+    icon_background,
+    description,
+    use_icon_as_answer_icon,
+    max_active_requests,
+  } as any)
+  if (!updated)
+    throw new Error('App not found')
+  return Promise.resolve({ ...updated } as AppDetailResponse)
 }
 
 export const copyApp = ({
@@ -80,7 +125,20 @@ export const copyApp = ({
   mode: AppModeEnum
   description?: string
 }): Promise<AppDetailResponse> => {
-  return post<AppDetailResponse>(`apps/${appID}/copy`, { body: { name, icon_type, icon, icon_background, mode, description } })
+  const originalApp = localStorageService.getAppById(appID)
+  if (!originalApp)
+    throw new Error('App not found')
+  
+  const newApp = localStorageService.createApp({
+    ...originalApp,
+    name,
+    icon_type,
+    icon,
+    icon_background: icon_background || originalApp.icon_background,
+    mode,
+    description: description || originalApp.description,
+  } as any)
+  return Promise.resolve({ ...newApp } as AppDetailResponse)
 }
 
 export const exportAppConfig = ({ appID, include = false, workflowID }: { appID: string, include?: boolean, workflowID?: string }): Promise<{ data: string }> => {
@@ -105,7 +163,10 @@ export const switchApp = ({ appID, name, icon_type, icon, icon_background }: { a
 }
 
 export const deleteApp = (appID: string): Promise<CommonResponse> => {
-  return del<CommonResponse>(`apps/${appID}`)
+  const deleted = localStorageService.deleteApp(appID)
+  if (!deleted)
+    throw new Error('App not found')
+  return Promise.resolve({ result: 'success' } as CommonResponse)
 }
 
 export const updateAppSiteStatus = ({ url, body }: { url: string, body: Record<string, any> }): Promise<AppDetailResponse> => {

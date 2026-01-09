@@ -21,7 +21,6 @@ import TagSelector from '@/app/components/base/tag-management/selector'
 import Toast, { ToastContext } from '@/app/components/base/toast'
 import Tooltip from '@/app/components/base/tooltip'
 import { NEED_REFRESH_APP_LIST_KEY } from '@/config'
-import { useAppContext } from '@/context/app-context'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import { useProviderContext } from '@/context/provider-context'
 import { useAsyncWindowOpen } from '@/hooks/use-async-window-open'
@@ -64,7 +63,6 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
   const { t } = useTranslation()
   const { notify } = useContext(ToastContext)
   const systemFeatures = useGlobalPublicStore(s => s.systemFeatures)
-  const { isCurrentWorkspaceEditor } = useAppContext()
   const { onPlanInfoChanged } = useProviderContext()
   const { push } = useRouter()
   const openAsyncWindow = useAsyncWindowOpen()
@@ -148,7 +146,7 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
       if (onRefresh)
         onRefresh()
       onPlanInfoChanged()
-      getRedirection(isCurrentWorkspaceEditor, newApp, push)
+      getRedirection(true, newApp, push)
     }
     catch {
       notify({ type: 'error', message: t('newApp.appCreateFailed', { ns: 'app' }) })
@@ -313,7 +311,7 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
         }
         <Divider className="my-1" />
         {
-          systemFeatures.webapp_auth.enabled && isCurrentWorkspaceEditor && (
+          false && (
             <>
               <button type="button" className="mx-1 flex h-8 cursor-pointer items-center rounded-lg px-3 hover:bg-state-base-hover" onClick={onClickAccessControl}>
                 <span className="text-sm leading-5 text-text-secondary">{t('accessControl', { ns: 'app' })}</span>
@@ -353,7 +351,7 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
       <div
         onClick={(e) => {
           e.preventDefault()
-          getRedirection(isCurrentWorkspaceEditor, app, push)
+          getRedirection(true, app, push)
         }}
         className="group relative col-span-1 inline-flex h-[160px] cursor-pointer flex-col rounded-xl border-[1px] border-solid border-components-card-border bg-components-card-bg shadow-sm transition-all duration-200 ease-in-out hover:shadow-lg"
       >
@@ -410,8 +408,7 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
           </div>
         </div>
         <div className="absolute bottom-1 left-0 right-0 flex h-[42px] shrink-0 items-center pb-[6px] pl-[14px] pr-[6px] pt-1">
-          {isCurrentWorkspaceEditor && (
-            <>
+          <>
               <div
                 className={cn('flex w-0 grow items-center gap-1')}
                 onClick={(e) => {
@@ -458,7 +455,6 @@ const AppCard = ({ app, onRefresh }: AppCardProps) => {
                 />
               </div>
             </>
-          )}
         </div>
       </div>
       {showEditModal && (

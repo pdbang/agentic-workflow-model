@@ -17,7 +17,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-import { get, post } from './base'
+import { localStorageService, type LocalApp } from './local-storage'
 import { useInvalid } from './use-base'
 
 const NAME_SPACE = 'apps'
@@ -63,11 +63,7 @@ const useAppFullListKey = [NAME_SPACE, 'full-list']
 export const useGenerateRuleTemplate = (type: GeneratorType, disabled?: boolean) => {
   return useQuery({
     queryKey: [NAME_SPACE, 'generate-rule-template', type],
-    queryFn: () => post<{ data: string }>('instruction-generate/template', {
-      body: {
-        type,
-      },
-    }),
+    queryFn: () => Promise.resolve({ data: '' }),
     enabled: !disabled,
     retry: 0,
   })
@@ -76,7 +72,12 @@ export const useGenerateRuleTemplate = (type: GeneratorType, disabled?: boolean)
 export const useAppDetail = (appID: string) => {
   return useQuery<App>({
     queryKey: [NAME_SPACE, 'detail', appID],
-    queryFn: () => get<App>(`/apps/${appID}`),
+    queryFn: () => {
+      const app = localStorageService.getAppById(appID)
+      if (!app)
+        throw new Error('App not found')
+      return Promise.resolve(app as App)
+    },
     enabled: !!appID,
   })
 }
@@ -85,7 +86,16 @@ export const useAppList = (params: AppListParams, options?: { enabled?: boolean 
   const normalizedParams = normalizeAppListParams(params)
   return useQuery<AppListResponse>({
     queryKey: appListKey(normalizedParams),
-    queryFn: () => get<AppListResponse>('/apps', { params: normalizedParams }),
+    queryFn: () => {
+      const result = localStorageService.searchApps(normalizedParams)
+      return Promise.resolve({
+        data: result.data as App[],
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        has_more: result.has_more,
+      })
+    },
     ...options,
   })
 }
@@ -93,7 +103,16 @@ export const useAppList = (params: AppListParams, options?: { enabled?: boolean 
 export const useAppFullList = () => {
   return useQuery<AppListResponse>({
     queryKey: useAppFullListKey,
-    queryFn: () => get<AppListResponse>('/apps', { params: { page: 1, limit: 100, name: '' } }),
+    queryFn: () => {
+      const result = localStorageService.searchApps({ page: 1, limit: 100, name: '' })
+      return Promise.resolve({
+        data: result.data as App[],
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        has_more: result.has_more,
+      })
+    },
   })
 }
 
@@ -105,7 +124,16 @@ export const useInfiniteAppList = (params: AppListParams, options?: { enabled?: 
   const normalizedParams = normalizeAppListParams(params)
   return useInfiniteQuery<AppListResponse>({
     queryKey: appListKey(normalizedParams),
-    queryFn: ({ pageParam = normalizedParams.page }) => get<AppListResponse>('/apps', { params: { ...normalizedParams, page: pageParam } }),
+    queryFn: ({ pageParam = normalizedParams.page }) => {
+      const result = localStorageService.searchApps({ ...normalizedParams, page: pageParam as number })
+      return Promise.resolve({
+        data: result.data as App[],
+        total: result.total,
+        page: result.page,
+        limit: result.limit,
+        has_more: result.has_more,
+      })
+    },
     getNextPageParam: lastPage => lastPage.has_more ? lastPage.page + 1 : undefined,
     initialPageParam: normalizedParams.page,
     placeholderData: keepPreviousData,
@@ -125,16 +153,16 @@ export const useInvalidateAppList = () => {
 const useAppStatisticsQuery = <T>(metric: string, appId: string, params?: DateRangeParams) => {
   return useQuery<T>({
     queryKey: [NAME_SPACE, 'statistics', metric, appId, params],
-    queryFn: () => get<T>(`/apps/${appId}/statistics/${metric}`, { params }),
-    enabled: !!appId,
+    queryFn: () => Promise.resolve({} as T),
+    enabled: false, // Disabled for local storage
   })
 }
 
 const useWorkflowStatisticsQuery = <T>(metric: string, appId: string, params?: DateRangeParams) => {
   return useQuery<T>({
     queryKey: [NAME_SPACE, 'workflow-statistics', metric, appId, params],
-    queryFn: () => get<T>(`/apps/${appId}/workflow/statistics/${metric}`, { params }),
-    enabled: !!appId,
+    queryFn: () => Promise.resolve({} as T),
+    enabled: false, // Disabled for local storage
   })
 }
 
@@ -189,16 +217,16 @@ export const useWorkflowAverageInteractions = (appId: string, params?: DateRange
 export const useAppVoices = (appId?: string, language?: string) => {
   return useQuery<AppVoicesListResponse>({
     queryKey: [NAME_SPACE, 'voices', appId, language || 'en-US'],
-    queryFn: () => get<AppVoicesListResponse>(`/apps/${appId}/text-to-audio/voices`, { params: { language: language || 'en-US' } }),
-    enabled: !!appId,
+    queryFn: () => Promise.resolve({ data: [] }),
+    enabled: false, // Disabled for local storage
   })
 }
 
 export const useAppApiKeys = (appId?: string, options?: { enabled?: boolean }) => {
   return useQuery<ApiKeysListResponse>({
     queryKey: [NAME_SPACE, 'api-keys', appId],
-    queryFn: () => get<ApiKeysListResponse>(`/apps/${appId}/api-keys`),
-    enabled: !!appId && (options?.enabled ?? true),
+    queryFn: () => Promise.resolve({ data: [] }),
+    enabled: false, // Disabled for local storage
   })
 }
 

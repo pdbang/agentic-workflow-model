@@ -22,7 +22,6 @@ import TagFilter from '@/app/components/base/tag-management/filter'
 import { useStore as useTagStore } from '@/app/components/base/tag-management/store'
 import CheckboxWithLabel from '@/app/components/datasets/create/website/base/checkbox-with-label'
 import { NEED_REFRESH_APP_LIST_KEY } from '@/config'
-import { useAppContext } from '@/context/app-context'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import { CheckModal } from '@/hooks/use-pay'
 import { useInfiniteAppList } from '@/service/use-apps'
@@ -47,7 +46,6 @@ const List = () => {
   const { t } = useTranslation()
   const { systemFeatures } = useGlobalPublicStore()
   const router = useRouter()
-  const { isCurrentWorkspaceEditor, isCurrentWorkspaceDatasetOperator, isLoadingCurrentWorkspace } = useAppContext()
   const showTagManagementModal = useTagStore(s => s.showTagManagementModal)
   const [activeTab, setActiveTab] = useQueryState(
     'category',
@@ -76,7 +74,7 @@ const List = () => {
   const { dragging } = useDSLDragDrop({
     onDSLFileDropped: handleDSLFileDropped,
     containerRef,
-    enabled: isCurrentWorkspaceEditor,
+    enabled: true,
   })
 
   const appListQueryParams = {
@@ -97,7 +95,7 @@ const List = () => {
     hasNextPage,
     error,
     refetch,
-  } = useInfiniteAppList(appListQueryParams, { enabled: !isCurrentWorkspaceDatasetOperator })
+  } = useInfiniteAppList(appListQueryParams)
 
   const anchorRef = useRef<HTMLDivElement>(null)
   const options = [
@@ -117,13 +115,6 @@ const List = () => {
   }, [refetch])
 
   useEffect(() => {
-    if (isCurrentWorkspaceDatasetOperator)
-      return router.replace('/datasets')
-  }, [router, isCurrentWorkspaceDatasetOperator])
-
-  useEffect(() => {
-    if (isCurrentWorkspaceDatasetOperator)
-      return
     const hasMore = hasNextPage ?? true
     let observer: IntersectionObserver | undefined
 
@@ -149,7 +140,7 @@ const List = () => {
       observer.observe(anchorRef.current)
     }
     return () => observer?.disconnect()
-  }, [isLoading, isFetchingNextPage, fetchNextPage, error, hasNextPage, isCurrentWorkspaceDatasetOperator])
+  }, [isLoading, isFetchingNextPage, fetchNextPage, error, hasNextPage])
 
   const { run: handleSearch } = useDebounceFn(() => {
     setSearchKeywords(keywords)
@@ -215,15 +206,13 @@ const List = () => {
           !hasAnyApp && 'overflow-hidden',
         )}
         >
-          {(isCurrentWorkspaceEditor || isLoadingCurrentWorkspace) && (
-            <NewAppCard
-              ref={newAppCardRef}
-              isLoading={isLoadingCurrentWorkspace}
-              onSuccess={refetch}
-              selectedAppType={activeTab}
-              className={cn(!hasAnyApp && 'z-10')}
-            />
-          )}
+          <NewAppCard
+            ref={newAppCardRef}
+            isLoading={false}
+            onSuccess={refetch}
+            selectedAppType={activeTab}
+            className={cn(!hasAnyApp && 'z-10')}
+          />
           {(() => {
             if (showSkeleton)
               return <AppCardSkeleton count={6} />
@@ -239,16 +228,14 @@ const List = () => {
           })()}
         </div>
 
-        {isCurrentWorkspaceEditor && (
-          <div
-            className={`flex items-center justify-center gap-2 py-4 ${dragging ? 'text-text-accent' : 'text-text-quaternary'}`}
-            role="region"
-            aria-label={t('newApp.dropDSLToCreateApp', { ns: 'app' })}
-          >
-            <RiDragDropLine className="h-4 w-4" />
-            <span className="system-xs-regular">{t('newApp.dropDSLToCreateApp', { ns: 'app' })}</span>
-          </div>
-        )}
+        <div
+          className={`flex items-center justify-center gap-2 py-4 ${dragging ? 'text-text-accent' : 'text-text-quaternary'}`}
+          role="region"
+          aria-label={t('newApp.dropDSLToCreateApp', { ns: 'app' })}
+        >
+          <RiDragDropLine className="h-4 w-4" />
+          <span className="system-xs-regular">{t('newApp.dropDSLToCreateApp', { ns: 'app' })}</span>
+        </div>
         {!systemFeatures.branding.enabled && (
           <Footer />
         )}
