@@ -1,0 +1,107 @@
+'use client'
+
+import { useState } from 'react'
+import type { Message } from '@/types/agent'
+import Button from '@/app/components/base/button'
+import { RiDeleteBinLine } from '@remixicon/react'
+
+interface MessagesFormProps {
+  messages: Record<string, Message>
+  onChange: (messages: Record<string, Message>) => void
+}
+
+export function MessagesForm({ messages, onChange }: MessagesFormProps) {
+  const [newMessageKey, setNewMessageKey] = useState('')
+
+  const handleUpdateMessage = (key: string, field: 'text' | 'texts' | 'audio', value: string | Record<string, string>) => {
+    onChange({
+      ...messages,
+      [key]: {
+        ...messages[key],
+        [field]: value,
+      },
+    })
+  }
+
+  const handleAddMessage = () => {
+    if (newMessageKey && !messages[newMessageKey]) {
+      onChange({
+        ...messages,
+        [newMessageKey]: { text: '' },
+      })
+      setNewMessageKey('')
+    }
+  }
+
+  const handleRemoveMessage = (key: string) => {
+    const { [key]: _, ...rest } = messages
+    onChange(rest)
+  }
+
+  return (
+    <section>
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Messages</h2>
+
+      <div className="space-y-4">
+        {Object.entries(messages).map(([key, message]) => (
+          <div key={key} className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium text-gray-900">{key}</h3>
+              <Button
+                variant="danger"
+                size="small"
+                onClick={() => handleRemoveMessage(key)}
+              >
+                <RiDeleteBinLine className="h-4 w-4" />
+                Remove
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Text
+                </label>
+                <textarea
+                  value={message.text ?? ''}
+                  onChange={(e) => handleUpdateMessage(key, 'text', e.target.value)}
+                  rows={2}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Audio Path (optional)
+                </label>
+                <input
+                  type="text"
+                  value={message.audio ?? ''}
+                  onChange={(e) => handleUpdateMessage(key, 'audio', e.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  placeholder="audios/welcome.mp3"
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newMessageKey}
+            onChange={(e) => setNewMessageKey(e.target.value)}
+            placeholder="New message key (e.g., welcome)"
+            className="flex-1 rounded-md border border-gray-300 px-3 py-2"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleAddMessage()
+              }
+            }}
+          />
+          <Button onClick={handleAddMessage}>Add Message</Button>
+        </div>
+      </div>
+    </section>
+  )
+}
