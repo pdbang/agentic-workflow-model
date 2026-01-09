@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { listClients, listAgentsByClient } from '@/lib/utils/paths'
-import { getAgentMetadata } from '@/lib/agents/parser'
+import { listClients, listAgentsByClient } from '@/utils/agent-paths'
+import { getAgentMetadata } from '@/service/agents/parser'
 
 export async function GET() {
   try {

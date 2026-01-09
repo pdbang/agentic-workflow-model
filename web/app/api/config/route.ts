@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PATHS, listClients, listModules } from '@/lib/utils/paths'
+import { PATHS, listClients, listModules } from '@/utils/agent-paths'
 
 export async function GET() {
   try {
